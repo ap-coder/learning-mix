@@ -7,18 +7,16 @@ phases:
       - php --version
       - apt-get update
       - apt-get install mlocate
-
- build:
-   commands:
-     - echo Build started on `date`
-     - echo Installing composer deps
-     - composer install
-     - cp .env.example .env
-     - php artisan cache:clear
-
- post_build:
-   commands:
-     - echo Build completed on `date`
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Installing composer deps
+      - composer install
+      - cp .env.example .env
+      - php artisan cache:clear
+  post_build:
+    commands:
+      - echo Build completed on `date`
 artifacts:
   type: zip
   files:
