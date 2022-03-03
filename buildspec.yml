@@ -18,6 +18,7 @@ phases:
       - echo CHECKING PHP VERSION AND MODULES
       - php --version
       - php -m
+      - sudo apt-get install mlocate
       - locate apache2
       - pwd
       - ls -l
