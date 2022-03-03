@@ -1,43 +1,26 @@
 version: 0.2
-
 phases:
   install:
-    runtime-versions:
-      php: 8.0
-  pre_build: # commands to be run before build
     commands:
-      - echo Logging in to Amazon ECR....
-      - aws --version
-      # login to Elastic container registry
-      - eval $(aws ecr get-login --region us-west-2 --no-include-email | sed 's|https://||')
-      - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
-      - IMAGE_TAG=1.0
-      - echo CREATING .env FILE..
-      - cp .env.example .env
-      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-      - echo CHECKING PHP VERSION AND MODULES
+      - curl -s https://getcomposer.org/installer | php
+      - mv  composer.phar /usr/local/bin/composer
       - php --version
-      - php -m
       - apt-get update
-      - sudo apt-get install mlocate
-      - locate apache2
-      - pwd
-      - ls -l
-      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-      - export
-      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-      - composer
-      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  build:
-    commands:
-      - echo BUILDING THE DOCKER IMAGE...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-  post_build:
-    commands:
-      - printenv
-      - echo Build completed on `date`
-      - echo Pushing the Docker image...
-      - docker image ls -a
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - apt-get install mlocate
+
+ build:
+   commands:
+     - echo Build started on `date`
+     - echo Installing composer deps
+     - composer install
+     - cp .env.example .env
+     - php artisan cache:clear
+
+ post_build:
+   commands:
+     - echo Build completed on `date`
+artifacts:
+  type: zip
+  files:
+    - '**/*'
+  name: learnMix-$(date +%Y-%m-%d)
