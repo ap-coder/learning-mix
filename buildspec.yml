@@ -4,6 +4,7 @@ phases:
   install: 
     runtime-versions:
       php: 8.0
+      nodejs: latest
   pre_build: # commands to be run before build
     commands:
     - echo Logging in to Amazon ECR....
@@ -14,6 +15,8 @@ phases:
     - IMAGE_TAG=1.0
   build:
     commands:
+    - php --version
+    - php -m  
     - echo Build started on `date`
     - echo installing composer..
     - composer install
@@ -30,3 +33,65 @@ phases:
       - echo Pushing the Docker image...
       - docker image ls -a
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+
+version: 0.2
+
+#env:
+  #variables:
+     # key: "value"
+     # key: "value"
+  #parameter-store:
+     # key: "value"
+     # key: "value"
+  #secrets-manager:
+     # key: secret-id:json-key:version-stage:version-id
+     # key: secret-id:json-key:version-stage:version-id
+  #exported-variables:
+     # - variable
+     # - variable
+  #git-credential-helper: yes
+#batch:
+  #fast-fail: true
+  #build-list:
+  #build-matrix:
+  #build-graph:
+phases:
+  #install:
+    #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
+    #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
+    #runtime-versions:
+      # name: version
+      # name: version
+    #commands:
+      # - command
+      # - command
+  #pre_build:
+    #commands:
+      # - command
+      # - command
+  build:
+    commands:
+      # - command
+      # - command
+  #post_build:
+    #commands:
+      # - command
+      # - command
+#reports:
+  #report-name-or-arn:
+    #files:
+      # - location
+      # - location
+    #base-directory: location
+    #discard-paths: yes
+    #file-format: JunitXml | CucumberJson
+#artifacts:
+  #files:
+    # - location
+    # - location
+  #name: $(date +%Y-%m-%d)
+  #discard-paths: yes
+  #base-directory: location
+#cache:
+  #paths:
+    # - paths
