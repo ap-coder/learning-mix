@@ -15,7 +15,10 @@ RUN docker-php-ext-install mbstring pdo pdo_mysql \
       && a2enmod rewrite negotiation \
       && docker-php-ext-install opcache
 
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY ./vhost.conf /etc/apache2/sites-available/000-default.conf
+
+RUN php --version
+Run php -m
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
     a2enmod rewrite && \
@@ -51,8 +54,7 @@ RUN apt-get update \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN php --version
-Run php -m
+
 # RUN update-alternatives --set php /usr/bin/php8.0
 
 # RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
