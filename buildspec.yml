@@ -23,6 +23,7 @@ phases:
     - echo INSTALLING PHP MODULES THAT ARE NEEDED
     - apt-get install -y php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
     - apt-get install -y libmagickwand-dev --no-install-recommends
+    - apt-get install -y php8.0-imagick
     - echo INSTALLING COMPOSER
     - curl -s https://getcomposer.org/installer | php
     - mv composer.phar /usr/local/bin/composer
