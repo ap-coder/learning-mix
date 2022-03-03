@@ -18,7 +18,7 @@ phases:
       - echo CHECKING PHP VERSION AND MODULES
       - php --version
       - php -m
-      - apache2 --version
+      - locate apache2
       - pwd
       - ls -l
       - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
