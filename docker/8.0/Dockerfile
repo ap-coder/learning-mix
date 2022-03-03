@@ -50,7 +50,7 @@ Run php -m
 # RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
 COPY --chown=www-data:www-data . .
-COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
+COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
