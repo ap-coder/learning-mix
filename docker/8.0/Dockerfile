@@ -11,6 +11,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN docker-php-ext-install mbstring pdo pdo_mysql \
       && a2enmod rewrite negotiation \
       && docker-php-ext-install opcache
