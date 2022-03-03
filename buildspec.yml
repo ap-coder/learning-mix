@@ -36,6 +36,9 @@ phases:
       - php -m
       - pwd
       - ls -l
+      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - export
+      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   build:
     commands:
       - echo BUILDING THE DOCKER IMAGE...
