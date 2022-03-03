@@ -1,45 +1,62 @@
 version: 0.2
 
 phases:
-  install: 
+  install:
     runtime-versions:
       php: 8.0
+      nodejs: 17.x
+    commands:
+      - echo BUILD STARTED ON `date`
+      - apt-get update -y
+      - apt-get install -y libpq-dev libzip-dev
+      - apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common
+      - add-apt-repository ppa:ondrej/php
+      - add-apt-repository ppa:ondrej/apache2
+      - service --status-all
+      - echo INSTALLING PHP MODULES THAT ARE NEEDED
+      - apt-get install -y php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
+      - apt-get install -y libmagickwand-dev --no-install-recommends
+      - apt-get install -y php8.0-imagick
+      - update-alternatives --set php /usr/bin/php8.0
+      - echo INSTALLING COMPOSER
+      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      - chown -R www-data:www-data $CODEBUILD_SRC_DIR/storage
+      - chmod -R 755 $CODEBUILD_SRC_DIR/storage
   pre_build: # commands to be run before build
     commands:
-    - echo Logging in to Amazon ECR....
-    - aws --version
-    # login to Elastic container registry
-    - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
-    - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
-    - IMAGE_TAG=1.0
+      - echo Logging in to Amazon ECR....
+      - aws --version
+      # login to Elastic container registry
+      - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
+      - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
+      - IMAGE_TAG=1.0
+      - echo RUNNING COMPOSER INSTALL
+      - composer install -n --with-all-dependencies
+      - echo CREATING .env FILE..
+      - cp .env.example .env
   build:
     commands:
-    - apt-get update -y
-    - apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common
-    - add-apt-repository ppa:ondrej/php
-    - add-apt-repository ppa:ondrej/apache2
-    - service --status-all
-    - echo INSTALLING PHP MODULES THAT ARE NEEDED
-    - apt-get install -y php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
-    - apt-get install -y libmagickwand-dev --no-install-recommends
-    - apt-get install -y php8.0-imagick
-    - update-alternatives --set php /usr/bin/php8.0
-    - echo INSTALLING COMPOSER
-    - curl -s https://getcomposer.org/installer | php
-    - mv composer.phar /usr/local/bin/composer
-    - php --version
-    - php -m  
-    - echo BUILD STARTED ON `date`
-    - echo CREATING .env FILE..
-    - cp .env.example .env
-    - php artisan
-    - echo GENERATING APP KEY
-    - php artisan key:generate
-    - echo BUILDING THE DOCKER IMAGE...
-    - docker build -t $REPOSITORY_URI:latest .
-    - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - echo CHECKING PHP VERSION AND MODULES
+      - php --version
+      - php -m
+      - php artisan
+      - echo GENERATING APP KEY
+      - php artisan key:generate
+      - pwd
+      - ls -l ./
+      - npm run production
+      - php artisan migrate --force
+      - php artisan db:seed
+      - php artisan route:clear
+      - php artisan config:clear
+      - php artisan cache:clear
+      - composer dump-auto
+      - echo BUILDING THE DOCKER IMAGE...
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
+      - printenv
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker image ls -a
