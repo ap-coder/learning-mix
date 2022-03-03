@@ -34,9 +34,6 @@ phases:
       - echo CHECKING PHP VERSION AND MODULES
       - php --version
       - php -m
-      - php artisan
-      - echo GENERATING APP KEY
-      - php artisan key:generate
       - pwd
       - ls -l
       - composer install -nW
