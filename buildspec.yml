@@ -46,18 +46,11 @@ phases:
       - echo GENERATING APP KEY
       - php artisan key:generate
       - pwd
-      - ls -l ./
-    finally:
-      - npm run production
-      - php artisan migrate --force
-      - php artisan db:seed
-      - php artisan route:clear
-      - php artisan config:clear
-      - php artisan cache:clear
-      - composer dump-auto
+      - ls -l
       - echo BUILDING THE DOCKER IMAGE...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - composer dump-auto
   post_build:
     commands:
       - printenv
