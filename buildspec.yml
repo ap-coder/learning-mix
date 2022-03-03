@@ -4,7 +4,6 @@ phases:
   install:
     runtime-versions:
       php: 8.0
-      nodejs: 17.x
     commands:
       - echo BUILD STARTED ON `date`
       - apt-get update -y
@@ -37,6 +36,8 @@ phases:
   build:
     commands:
       - echo CHECKING PHP VERSION AND MODULES
+      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+      - nvm install --lts
       - php --version
       - php -m
       - php artisan
