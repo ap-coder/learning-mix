@@ -30,13 +30,10 @@ phases:
       - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
       - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
       - IMAGE_TAG=1.0
-    finally:
       - echo CREATING .env FILE..
       - cp .env.example .env
   build:
     commands:
-      - echo RUNNING COMPOSER INSTALL
-      - composer install -nW
       - echo CHECKING PHP VERSION AND MODULES
       - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - nvm install --lts
@@ -48,8 +45,10 @@ phases:
       - pwd
       - ls -l
       - echo BUILDING THE DOCKER IMAGE...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t temp-www:latest .
+      - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
+      - echo RUNNING COMPOSER INSTALL
+      - composer install -nW
       - composer dump-auto
   post_build:
     commands:
@@ -57,4 +56,4 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker image ls -a
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
