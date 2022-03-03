@@ -4,7 +4,6 @@ phases:
   install: 
     runtime-versions:
       php: 8.0
-      nodejs: latest
   pre_build: # commands to be run before build
     commands:
     - echo Logging in to Amazon ECR....
@@ -24,6 +23,7 @@ phases:
     - apt-get install -y php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
     - apt-get install -y libmagickwand-dev --no-install-recommends
     - apt-get install -y php8.0-imagick
+    - update-alternatives --set php /usr/bin/php8.0
     - echo INSTALLING COMPOSER
     - curl -s https://getcomposer.org/installer | php
     - mv composer.phar /usr/local/bin/composer
@@ -32,6 +32,7 @@ phases:
     - echo BUILD STARTED ON `date`
     - echo CREATING .env FILE..
     - cp .env.example .env
+    - php artisan
     - echo GENERATING APP KEY
     - php artisan key:generate
     - echo BUILDING THE DOCKER IMAGE...
