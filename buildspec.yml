@@ -47,6 +47,7 @@ phases:
       - composer install -nW
       - composer dump-auto
       - echo BUILDING THE DOCKER IMAGE...
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 244799856984.dkr.ecr.us-west-2.amazonaws.com
       - docker build -t temp-www .
       - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
       - echo RUNNING COMPOSER INSTALL
