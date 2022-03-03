@@ -4,23 +4,6 @@ phases:
   install:
     runtime-versions:
       php: 8.0
-    commands:
-      - echo BUILD STARTED ON `date`
-      - apt-get update -y
-      - apt-get install -y libpq-dev libzip-dev
-      - apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common
-      - add-apt-repository ppa:ondrej/php
-      - add-apt-repository ppa:ondrej/apache2
-      - service --status-all
-      - echo INSTALLING PHP MODULES THAT ARE NEEDED
-      - apt-get install -y php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
-      - apt-get install -y libmagickwand-dev --no-install-recommends
-      - apt-get install -y php8.0-imagick
-      - update-alternatives --set php /usr/bin/php8.0
-      - echo INSTALLING COMPOSER
-      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-      - chown -R www-data:www-data $CODEBUILD_SRC_DIR/storage
-      - chmod -R 755 $CODEBUILD_SRC_DIR/storage
   pre_build: # commands to be run before build
     commands:
       - echo Logging in to Amazon ECR....
@@ -31,9 +14,11 @@ phases:
       - IMAGE_TAG=1.0
       - echo CREATING .env FILE..
       - cp .env.example .env
+      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
       - echo CHECKING PHP VERSION AND MODULES
       - php --version
       - php -m
+      - apache2 --version
       - pwd
       - ls -l
       - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -42,12 +27,12 @@ phases:
   build:
     commands:
       - echo BUILDING THE DOCKER IMAGE...
-      - docker build -t temp-www .
-      - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       - printenv
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker image ls -a
-      - docker push 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
