@@ -16,26 +16,24 @@ phases:
   build:
     commands:
     - apt-get update -y
-    - apt-get install lsb-release ca-certificates apt-transport-https software-properties-common -y
+    - apt-get install -y lsb-release ca-certificates apt-transport-https software-properties-common
     - add-apt-repository ppa:ondrej/php
     - add-apt-repository ppa:ondrej/apache2
     - service --status-all
-    - echo installing php modules that are needed
-    - apt-get install php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
+    - echo INSTALLING PHP MODULES THAT ARE NEEDED
+    - apt-get install -y php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
     - apt-get install -y libmagickwand-dev --no-install-recommends
-    - echo installing composer
+    - echo INSTALLING COMPOSER
     - curl -s https://getcomposer.org/installer | php
     - mv composer.phar /usr/local/bin/composer
     - php --version
     - php -m  
-    - echo Build started on `date`
-    - echo installing composer..
-    - composer install
-    - echo creating .env file..
+    - echo BUILD STARTED ON `date`
+    - echo CREATING .env FILE..
     - cp .env.example .env
-    - echo generating app key
-    - php artisan key:generate
-    - echo Building the Docker image...
+    - echo GENERATING APP KEY
+    - php artisan key:generate --ansi
+    - echo BUILDING THE DOCKER IMAGE...
     - docker build -t $REPOSITORY_URI:latest .
     - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
