@@ -15,6 +15,14 @@ RUN docker-php-ext-install mbstring pdo pdo_mysql \
       && a2enmod rewrite negotiation \
       && docker-php-ext-install opcache
 
+COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    a2enmod rewrite && \
+    a2dissite 000-default && \
+    a2dissite 000-default && \
+    service apache2 restart
+
 RUN apt-get update \
     # && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
     # && mkdir -p ~/.gnupg \
@@ -50,7 +58,7 @@ Run php -m
 # RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
 COPY --chown=www-data:www-data . .
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+
 
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail

@@ -36,8 +36,6 @@ phases:
       - php -m
       - pwd
       - ls -l
-      - composer install -nW
-      - composer dump-auto
   build:
     commands:
       - echo BUILDING THE DOCKER IMAGE...
