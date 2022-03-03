@@ -40,10 +40,11 @@ RUN apt-get update \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN php --version
+Run php -m
+# RUN update-alternatives --set php /usr/bin/php8.0
 
-RUN update-alternatives --set php /usr/bin/php8.0
-
-RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
+# RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
 COPY --chown=www-data:www-data . .
 
