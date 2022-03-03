@@ -18,12 +18,16 @@ phases:
       - echo CHECKING PHP VERSION AND MODULES
       - php --version
       - php -m
+      - apt-get update
       - sudo apt-get install mlocate
       - locate apache2
       - pwd
       - ls -l
       - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
       - export
+      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - composer
       - echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   build:
     commands:
