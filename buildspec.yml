@@ -15,7 +15,6 @@ phases:
       - add-apt-repository ppa:ondrej/php
       - add-apt-repository ppa:ondrej/apache2
       - service --status-all
-    finally:
       - echo INSTALLING PHP MODULES THAT ARE NEEDED
       - apt-get install -y php8.0-imap php8.0-imap php8.0-mysql php8.0-redis php8.0-gd php8.0-curl php8.0-snmp php8.0-xml php8.0-zip php8.0-mbstring
       - apt-get install -y libmagickwand-dev --no-install-recommends
@@ -36,8 +35,6 @@ phases:
       - echo CREATING .env FILE..
       - cp .env.example .env
       - echo CHECKING PHP VERSION AND MODULES
-      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-      - nvm install
       - php --version
       - php -m
       - php artisan
