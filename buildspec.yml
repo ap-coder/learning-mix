@@ -6,7 +6,7 @@ phases:
       php: 8.0
     commands:
       - echo BUILD STARTED ON `date`
-      - . codebuild_nvm_wrapper.sh
+      - bash codebuild_nvm_wrapper.sh
       - npm install
       - node -v
       - apt-get update -y
