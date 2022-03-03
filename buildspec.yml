@@ -44,12 +44,12 @@ phases:
       - php artisan key:generate
       - pwd
       - ls -l
-      - echo BUILDING THE DOCKER IMAGE...
-      - docker build -t temp-www:latest .
-      - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
-      - echo RUNNING COMPOSER INSTALL
       - composer install -nW
       - composer dump-auto
+      - echo BUILDING THE DOCKER IMAGE...
+      - docker build -t temp-www .
+      - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
+      - echo RUNNING COMPOSER INSTALL
   post_build:
     commands:
       - printenv
