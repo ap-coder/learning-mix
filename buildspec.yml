@@ -15,6 +15,13 @@ phases:
     - IMAGE_TAG=1.0
   build:
     commands:
+    - apt-get update -y
+    - apt-get install -y php8.0-cli php8.0-dev php8.0-pgsql php8.0-sqlite3 php8.0-gd php8.0-curl php8.0-memcached \
+      php8.0-imap php8.0-mysql php8.0-mbstring php8.0-xml php8.0-zip php8.0-bcmath php8.0-soap php8.0-intl \
+      php8.0-readline php8.0-pcov php8.0-msgpack php8.0-igbinary php8.0-ldap php8.0-redis php8.0-swoole php8.0-xdebug \
+      apt install libmagickwand-dev --no-install-recommends
+    - curl -s https://getcomposer.org/installer | php
+    - mv  composer.phar /usr/local/bin/composer
     - php --version
     - php -m  
     - echo Build started on `date`
@@ -33,65 +40,3 @@ phases:
       - echo Pushing the Docker image...
       - docker image ls -a
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-
-version: 0.2
-
-#env:
-  #variables:
-     # key: "value"
-     # key: "value"
-  #parameter-store:
-     # key: "value"
-     # key: "value"
-  #secrets-manager:
-     # key: secret-id:json-key:version-stage:version-id
-     # key: secret-id:json-key:version-stage:version-id
-  #exported-variables:
-     # - variable
-     # - variable
-  #git-credential-helper: yes
-#batch:
-  #fast-fail: true
-  #build-list:
-  #build-matrix:
-  #build-graph:
-phases:
-  #install:
-    #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
-    #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
-    #runtime-versions:
-      # name: version
-      # name: version
-    #commands:
-      # - command
-      # - command
-  #pre_build:
-    #commands:
-      # - command
-      # - command
-  build:
-    commands:
-      # - command
-      # - command
-  #post_build:
-    #commands:
-      # - command
-      # - command
-#reports:
-  #report-name-or-arn:
-    #files:
-      # - location
-      # - location
-    #base-directory: location
-    #discard-paths: yes
-    #file-format: JunitXml | CucumberJson
-#artifacts:
-  #files:
-    # - location
-    # - location
-  #name: $(date +%Y-%m-%d)
-  #discard-paths: yes
-  #base-directory: location
-#cache:
-  #paths:
-    # - paths
