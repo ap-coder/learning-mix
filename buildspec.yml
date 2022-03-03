@@ -26,7 +26,7 @@ phases:
       - echo Logging in to Amazon ECR....
       - aws --version
       # login to Elastic container registry
-      - eval $(aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 244799856984.dkr.ecr.us-west-2.amazonaws.com | sed 's|https://||')
+      - eval $(aws ecr get-login --region us-west-2 --no-include-email | sed 's|https://||')
       - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
       - IMAGE_TAG=1.0
       - echo CREATING .env FILE..

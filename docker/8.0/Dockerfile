@@ -11,6 +11,9 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN docker-php-ext-install mbstring pdo pdo_mysql \
+      && a2enmod rewrite negotiation \
+      && docker-php-ext-install opcache
 
 RUN apt-get update \
     # && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
@@ -47,6 +50,7 @@ Run php -m
 # RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
 COPY --chown=www-data:www-data . .
+COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
