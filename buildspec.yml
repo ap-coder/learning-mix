@@ -2,9 +2,16 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      php: 8.0
+      php: 8
       nodejs: 14
     commands:
+      - echo Logging in to Amazon ECR....
+      - aws --version
+      - echo Build started on `date`
+      # login to Elastic container registry
+      - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
+      - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
+      - IMAGE_TAG=1.0
       - |
         export DEBIAN_FRONTEND=noninteractive
         #Install php8.0
@@ -14,6 +21,7 @@ phases:
         apt-get update
 
         # Install PHP
+      - |
         apt-get install -y php8.0-amqp php8.0-common php8.0-gd php8.0-ldap php8.0-odbc php8.0-readline php8.0-sqlite3
         php8.0-xsl php8.0-apcu php8.0-curl php8.0-gmp php8.0-mailparse php8.0-opcache php8.0-redis php8.0-sybase
         php8.0-yac php8.0-ast php8.0-dba php8.0-igbinary php8.0-mbstring php8.0-pgsql php8.0-rrd php8.0-tidy php8.0-yaml
@@ -22,18 +30,26 @@ phases:
         php8.0-enchant php8.0-interbase php8.0-mysql php8.0-psr php8.0-soap php8.0-xhprof php8.0-cli php8.0-fpm
         php8.0-intl php8.0-oauth php8.0-raphf php8.0-solr php8.0-xml
 
-        php -r "readfile('http://getcomposer.org/installer');" | php --
-        --install-dir=/usr/bin/ --filename=composer
-        curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-        && apt-get -y install nodejs mysql-client  mlocate \
+      - apt-get install -y libmagickwand-dev --no-install-recommends
+      - apt-get install -y php8.0-imagick
+
+      - php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+
+      - curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+        && apt-get -y install nodejs mlocate \
         && apt-get -y autoremove \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
   build:
     commands:
-      - echo Build started on `date`
       - echo Installing composer deps
       - composer install --no-progress --no-suggest
+      - echo CREATING .env FILE..
+      - cp .env.example .env
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
+      - docker image ls -a
