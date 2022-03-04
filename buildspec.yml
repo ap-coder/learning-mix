@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      php: 8
+      php: 8.0
       nodejs: 14
     commands:
       - echo Logging in to Amazon ECR....
