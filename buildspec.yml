@@ -12,6 +12,8 @@ phases:
       - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
       - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
       - IMAGE_TAG=1.0
+      - php --version
+      - dpkg --get-selections | grep -i php
       - |
         export DEBIAN_FRONTEND=noninteractive
         #Install php8.0
