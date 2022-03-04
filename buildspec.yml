@@ -13,7 +13,7 @@ phases:
       - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
       - IMAGE_TAG=1.0
       - php --version
-      - dpkg --get-selections | grep -i php
+      - php -i | grep /etc/php/8.0/cli/conf.d/
       - |
         export DEBIAN_FRONTEND=noninteractive
         #Install php8.0
