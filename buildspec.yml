@@ -16,7 +16,7 @@ phases:
         export DEBIAN_FRONTEND=noninteractive
         #Install php8.0
         apt-get update
-        apt-get install -y  software-properties-common
+        apt-get install -y  software-properties-common curl
         add-apt-repository -y ppa:ondrej/php
         apt-get update
 
