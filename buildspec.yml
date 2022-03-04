@@ -21,8 +21,7 @@ phases:
         apt-get update
 
         # Install PHP
-      - |
-        apt-get install -y php8.0-gd php8.0-ldap php8.0-odbc php8.0-readline \
+      - apt-get install -y php8.0-gd php8.0-ldap php8.0-odbc php8.0-readline \
         php8.0-xsl php8.0-apcu php8.0-curl php8.0-gmp php8.0-mailparse php8.0-opcache php8.0-redis php8.0-sybase \
         php8.0-yac php8.0-ast php8.0-dba php8.0-igbinary php8.0-mbstring php8.0-rrd php8.0-tidy php8.0-yaml \
         php8.0-bcmath php8.0-dev php8.0-imagick php8.0-phpdbg php8.0-smbclient php8.0-uuid php8.0-zip \
