@@ -58,9 +58,9 @@ RUN useradd -ms /bin/bash sail && adduser sail sudo
 # Users in the sudoers group can sudo as sail without password.
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN useradd -ms /bin/bash root && adduser root sudo
-# Users in the sudoers group can sudo as root without password.
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# RUN useradd -ms /bin/bash root && adduser root sudo
+# # Users in the sudoers group can sudo as root without password.
+# RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 # |--------------------------------------------------------------------------
 # | Default php.ini file
 # |--------------------------------------------------------------------------
