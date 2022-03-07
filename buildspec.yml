@@ -35,15 +35,11 @@ phases:
     commands:
       - aws --version
       - eval $(aws ecr get-login --no-include-email --region us-west-2)
-      # - echo Printing ecr log
-      # - cat ./.ecr/log/*
-      - echo $user
-      - echo Pushing the Docker image...
-      - cat /root/.ecr/log/*
       # - docker image ls -a
       # - echo $REPOSITORY_URI
       # - echo $IMAGE_TAG
       # - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
       # - echo ${CODEBUILD_BUILD_NUMBER}
-      - docker push $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
+      # - docker push $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Build completed on `date`
