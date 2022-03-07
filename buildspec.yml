@@ -27,7 +27,9 @@ phases:
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
+      - echo Printing ecr log
+      - cat ./.ecr/log/*
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      #- docker image ls -a
+      - docker image ls -a
       - docker push $REPOSITORY_URI:$IMAGE_TAG
