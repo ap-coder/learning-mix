@@ -34,7 +34,7 @@ phases:
   post_build:
     commands:
       - aws --version
-      - eval $(aws ecr get-login --no-include-email --region us-west-2)
+      - echo $(aws ecr get-login --no-include-email --region us-west-2)
 
       # - docker image ls -a
       # - echo $REPOSITORY_URI
