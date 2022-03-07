@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 define('LARAVEL_START', microtime(true));
 
@@ -43,6 +44,13 @@ require __DIR__.'/../vendor/autoload.php';
 | to this client's browser, allowing them to enjoy our application.
 |
 */
+
+if(DB::connection()->getDatabaseName())
+{
+   echo "Connected to database ".DB::connection()->getDatabaseName();
+}
+
+$response->send();
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
