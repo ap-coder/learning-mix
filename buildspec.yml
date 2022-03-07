@@ -9,7 +9,7 @@ phases:
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 244799856984.dkr.ecr.us-west-2.amazonaws.com
       - echo Build started on `date`
       # login to Elastic container registry
-      - eval $(aws ecr get-login-password --region us-west-2)
+      - eval $(aws ecr get-login-password --region us-west-2 | sed 's|https://||')
       - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
       # - IMAGE_TAG=1.0
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
@@ -34,6 +34,9 @@ phases:
       - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
   post_build:
     commands:
+      - aws --version
+      - eval $(aws ecr get-login-password --region us-west-2)
+
       # - docker image ls -a
       # - echo $REPOSITORY_URI
       # - echo $IMAGE_TAG
