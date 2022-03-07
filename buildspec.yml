@@ -16,7 +16,6 @@ phases:
       - echo $REPOSITORY_URI
       - echo $COMMIT_HASH
       - echo $IMAGE_TAG
-      - apt-get -y install amazon-ecr-credential-helper
       - php --version
       - php -m
       - php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
@@ -30,7 +29,7 @@ phases:
       - echo CREATING .env FILE..
       - cp .env.example .env
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
+      - docker build -t $REPOSITORY_URI .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
   post_build:
     commands:
