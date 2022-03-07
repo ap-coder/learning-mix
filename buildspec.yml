@@ -18,25 +18,27 @@ phases:
       - apt-get -y install mlocate
   build:
     commands:
-      - echo $REPOSITORY_URI
-      - echo $IMAGE_TAG
+      # - echo $REPOSITORY_URI
+      # - echo $IMAGE_TAG
       - echo Installing composer deps
       - composer install --no-progress --no-suggest
       - echo CREATING .env FILE..
       - cp .env.example .env
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
   post_build:
     commands:
+      - aws --version
       - eval $(aws ecr get-login --region us-west-2 --no-include-email | sed 's|https://||')
-      - echo Printing ecr log
-      - cat ./.ecr/log/*
-      - echo Build completed on `date`
+      # - echo Printing ecr log
+      # - cat ./.ecr/log/*
+      - echo whoami
       - echo Pushing the Docker image...
-      - docker image ls -a
-      - echo $REPOSITORY_URI
-      - echo $IMAGE_TAG
-      - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
-      - echo ${CODEBUILD_BUILD_NUMBER}
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      # - docker image ls -a
+      # - echo $REPOSITORY_URI
+      # - echo $IMAGE_TAG
+      # - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      # - echo ${CODEBUILD_BUILD_NUMBER}
+      - sudo docker push $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
+      - echo Build completed on `date`
