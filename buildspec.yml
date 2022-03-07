@@ -18,13 +18,15 @@ phases:
       - apt-get -y install mlocate
   build:
     commands:
+      - echo $REPOSITORY_URI
+      - echo $IMAGE_TAG
       - echo Installing composer deps
       - composer install --no-progress --no-suggest
       - echo CREATING .env FILE..
       - cp .env.example .env
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:${CODEBUILD_RESOLVED_SOURCE_VERSION}-v${CODEBUILD_BUILD_NUMBER}
   post_build:
     commands:
       - echo Printing ecr log
@@ -34,4 +36,4 @@ phases:
       - docker image ls -a
       - echo $REPOSITORY_URI
       - echo $IMAGE_TAG
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:${CODEBUILD_RESOLVED_SOURCE_VERSION}-v${CODEBUILD_BUILD_NUMBER}
