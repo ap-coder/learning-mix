@@ -15,11 +15,11 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo $REPOSITORY_URI
       - echo $COMMIT_HASH
-      - echo $IMAGE_TAG      
+      - echo $IMAGE_TAG
+      - yum -y install amazon-ecr-credential-helper
       - php --version
       - php -m
       - php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
-
       - apt-get -y install mlocate
   build:
     commands:
@@ -45,5 +45,5 @@ phases:
       # - echo $IMAGE_TAG
       # - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
       # - echo ${CODEBUILD_BUILD_NUMBER}
-      - sudo docker push $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
+      - docker push $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
       - echo Build completed on `date`
