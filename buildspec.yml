@@ -10,7 +10,12 @@ phases:
       # login to Elastic container registry
       - eval $(aws ecr get-login --region us-west-2 --no-include-email | sed 's|https://||')
       - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
-      - IMAGE_TAG=1.0
+      # - IMAGE_TAG=1.0
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - echo $REPOSITORY_URI
+      - echo $COMMIT_HASH
+      - echo $IMAGE_TAG      
       - php --version
       - php -m
       - php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
@@ -30,10 +35,10 @@ phases:
   post_build:
     commands:
       - aws --version
-      - eval $(aws ecr get-login --region us-west-2 --no-include-email | sed 's|https://||')
+      - eval $(aws ecr get-login --no-include-email --region us-west-2)
       # - echo Printing ecr log
       # - cat ./.ecr/log/*
-      - echo whoami
+      - echo $user
       - echo Pushing the Docker image...
       # - docker image ls -a
       # - echo $REPOSITORY_URI
