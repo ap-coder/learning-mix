@@ -16,7 +16,7 @@ phases:
       - echo $REPOSITORY_URI
       - echo $COMMIT_HASH
       - echo $IMAGE_TAG
-      - yum -y install amazon-ecr-credential-helper
+      - apt-get -y install amazon-ecr-credential-helper
       - php --version
       - php -m
       - php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
@@ -40,6 +40,7 @@ phases:
       # - cat ./.ecr/log/*
       - echo $user
       - echo Pushing the Docker image...
+      - cat /root/.ecr/log/*
       # - docker image ls -a
       # - echo $REPOSITORY_URI
       # - echo $IMAGE_TAG
