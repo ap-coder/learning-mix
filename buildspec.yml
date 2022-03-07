@@ -26,9 +26,10 @@ phases:
       - cp .env.example .env
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:${CODEBUILD_RESOLVED_SOURCE_VERSION}-v${CODEBUILD_BUILD_NUMBER}
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
+      - eval $(aws ecr get-login --region us-west-2 --no-include-email | sed 's|https://||')
       - echo Printing ecr log
       - cat ./.ecr/log/*
       - echo Build completed on `date`
@@ -36,4 +37,6 @@ phases:
       - docker image ls -a
       - echo $REPOSITORY_URI
       - echo $IMAGE_TAG
-      - docker push $REPOSITORY_URI:${CODEBUILD_RESOLVED_SOURCE_VERSION}-v${CODEBUILD_BUILD_NUMBER}
+      - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - echo ${CODEBUILD_BUILD_NUMBER}
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
