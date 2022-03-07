@@ -29,6 +29,7 @@ phases:
       - composer install --no-progress --no-suggest
       - echo CREATING .env FILE..
       - cp .env.example .env
+      - cat /root/.docker/config.json
       - echo Building the Docker image...
       - docker build -t temp-www .
       - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
