@@ -9,40 +9,27 @@ phases:
       - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 244799856984.dkr.ecr.us-west-2.amazonaws.com
       - echo Build started on `date`
       # login to Elastic container registry
-      - eval $(aws ecr get-login-password --region us-west-2 | sed 's|https://||')
+      - eval $(aws ecr get-login-password --region us-west-2 --no-include-email | sed 's|https://||')
       - REPOSITORY_URI=244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www
-      # - IMAGE_TAG=1.0
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
-      - echo $REPOSITORY_URI
-      - echo $COMMIT_HASH
-      - echo $IMAGE_TAG
+      - IMAGE_TAG=1.0
       - php --version
       - php -m
       - php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+
       - apt-get -y install mlocate
   build:
     commands:
-      # - echo $REPOSITORY_URI
-      # - echo $IMAGE_TAG
       - echo Installing composer deps
       - composer install --no-progress --no-suggest
       - echo CREATING .env FILE..
       - cp .env.example .env
       - cat /root/.docker/config.json
       - echo Building the Docker image...
-      - docker build -t temp-www .
-      - docker tag temp-www:latest 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - aws --version
-      - eval $(aws ecr get-login-password --region us-west-2)
-
-      # - docker image ls -a
-      # - echo $REPOSITORY_URI
-      # - echo $IMAGE_TAG
-      # - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
-      # - echo ${CODEBUILD_BUILD_NUMBER}
-      # - docker push $REPOSITORY_URI:$IMAGE_TAG.${CODEBUILD_BUILD_NUMBER}
-      - docker push 244799856984.dkr.ecr.us-west-2.amazonaws.com/temp-www:latest
       - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker image ls -a
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
